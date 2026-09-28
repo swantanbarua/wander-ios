@@ -6,8 +6,8 @@ original** — and instrumented so every optimisation is a measured, reproducibl
 This is the **native iOS build** (SwiftUI). The same spec will be built natively for Android
 and once as a hybrid app, so the three implementations can be compared side by side.
 
-> **Status: early foundation.** Project skeleton and colour tokens are in place. No screens
-> yet. Metrics below are targets from the spec, not measurements — they will be replaced
+> **Status: early foundation.** Project skeleton and all 39 colour tokens are in place;
+> typography tokens are in progress. No screens yet. Metrics below are targets from the spec, not measurements — they will be replaced
 > with real baseline → optimised numbers in `METRICS.md` as the build progresses.
 
 ## Why this exists
@@ -61,7 +61,7 @@ re-measure, so each percentage is attributable. Results live in `METRICS.md` (no
 |---|---|
 | Language / UI | Swift 6 (strict concurrency), SwiftUI, iOS 17+ |
 | Tooling | Xcode 26.6, Swift Testing + XCUITest |
-| Architecture | UI → ViewModel (`@Observable`, single `UiState`) → use cases → repositories → platform |
+| Architecture | Clean Architecture per feature: Presentation (SwiftUI views, `@Observable` ViewModel, single `UiState`) → Domain (entities, use cases, repository protocols — pure Swift) ← Data (DTOs, mappers, repository implementations). Dependencies point inward; constructor injection from one `AppContainer` |
 | State / navigation | Unidirectional data flow; `NavigationStack` with a typed route per tab |
 | Data | `URLSession` client, SQLite (GRDB), in-house image loader — *planned* |
 | Maps | MapKit — *planned* |
@@ -72,12 +72,17 @@ re-measure, so each percentage is attributable. Results live in `METRICS.md` (no
 Wander/
   App/            entry point + composition root
   Core/
-    Tokens/       design tokens (Colors.xcassets — 19 colour sets, light + dark)
+    Tokens/       design tokens: Colors.xcassets (39 colour sets in 13 folders, light + dark),
+                  Typography.swift (TextRole: the spec's 9 text roles)
     Components/   shared UI components (C-01…)
     Networking/   API client
     Data/         repositories, database, cache policy
     Images/       image loading + caching
-  Features/       one folder per feature, each owning its screens, ViewModels, use cases
+  Features/       one folder per feature, each split into Clean Architecture layers:
+    <Feature>/
+      Presentation/ views + ViewModel (depends on Domain only)
+      Domain/       entities, use cases, repository protocols (depends on nothing)
+      Data/         DTOs, mappers, repository implementations (implements Domain)
     Explore  Listing  Booking  Wishlists  Trips  Inbox  Host  Profile
 WanderTests/      unit tests (Swift Testing)
 WanderUITests/    flow tests (XCUITest)
@@ -88,8 +93,9 @@ WanderUITests/    flow tests (XCUITest)
 - [x] Project skeleton: SwiftUI app, Swift 6 language mode, iOS 17.0 deployment target
 - [x] Layered folder structure (App / Core / Features)
 - [x] Colour tokens as an asset catalog with Any + Dark appearances — brand palette (6) and neutrals (13), named after the spec's `color.*` tokens
-- [ ] Semantic, map and AI colours
-- [ ] Typography, spacing, radius, elevation tokens
+- [x] Semantic (9), map (7), superhost and AI (3) colours — 39 in all, grouped into folders by name
+- [ ] Typography tokens — `TextRole` with size, line height and weight done; Dynamic Type scaling next
+- [ ] Spacing, radius, elevation tokens
 - [ ] Components (C-01…C-43)
 - [ ] Explore → Listing → Booking → Trips → Wishlists → Inbox → Host → Profile
 - [ ] Baseline measurements, then the optimisation ladder
