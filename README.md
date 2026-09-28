@@ -94,7 +94,7 @@ WanderUITests/    flow tests (XCUITest)
 - [x] Layered folder structure (App / Core / Features)
 - [x] Colour tokens as an asset catalog with Any + Dark appearances — brand palette (6) and neutrals (13), named after the spec's `color.*` tokens
 - [x] Semantic (9), map (7), superhost and AI (3) colours — 39 in all, grouped into folders by name
-- [ ] Typography tokens — `TextRole` with size, line height, weight, Dynamic Type text style, max scale and overline tracking done; the `.textRole(_:)` modifier next
+- [ ] Typography tokens — `TextRole` with size, line height, weight, Dynamic Type text style, max scale and overline tracking done; `.textRole(_:)` view modifier applies size and weight (tracking, uppercase and Dynamic Type scaling next)
 - [ ] Spacing, radius, elevation tokens
 - [ ] Components (C-01…C-43)
 - [ ] Explore → Listing → Booking → Trips → Wishlists → Inbox → Host → Profile

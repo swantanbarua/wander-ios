@@ -7,8 +7,10 @@
 
 import SwiftUI
 
+// MARK: - TEXTROLE
 enum TextRole: CaseIterable {
     
+    // MARK: - CASES
     case display
     case title1
     case title2
@@ -19,6 +21,7 @@ enum TextRole: CaseIterable {
     case caption
     case overline
     
+    // MARK: - COMPUTED PROPERTIES
     // Point size at the default text setting
     var size: CGFloat {
         switch self {
@@ -49,7 +52,6 @@ enum TextRole: CaseIterable {
         }
     }
     
-    // Font Weight
     var weight: Font.Weight {
         switch self {
         case .display:                                          .bold
@@ -87,5 +89,46 @@ enum TextRole: CaseIterable {
     
     var isUppercase: Bool {
         self == .overline
+    }
+}
+
+// MARK: - TEXT ROLE MODIFIER
+struct TextRoleModifier: ViewModifier {
+    
+    // MARK: - PROPERTIES
+    let role: TextRole
+    
+    // MARK: - BODY
+    func body(content: Content) -> some View {
+        content
+            .font(
+                .system(
+                    size: role.size,
+                    weight: role.weight
+                )
+            )
+    }
+}
+
+// MARK: - VIEW + TEXTROLE
+extension View {
+    
+    func textRole(_ role: TextRole) -> some View {
+        modifier(TextRoleModifier(role: role))
+    }
+}
+
+// MARK: - PREVIEW
+#Preview {
+    VStack(
+        alignment: .leading,
+        spacing: 12
+    ) {
+        ForEach(
+            TextRole.allCases,
+            id: \.self
+        ) { role in
+            Text("Lisbon").textRole(role)
+        }
     }
 }
