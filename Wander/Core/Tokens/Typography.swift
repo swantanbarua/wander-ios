@@ -57,4 +57,35 @@ enum TextRole: CaseIterable {
         case .bodyLg, .body, .caption:                          .regular
         }
     }
+    
+    // Apple text styles this role scales with (Dynamic Type)
+    var textStyle: Font.TextStyle {
+        switch self {
+        case .display:              .largeTitle
+        case .title1:               .title
+        case .title2:               .title2
+        case .title3:               .headline
+        case .bodyLg:               .body
+        case .body, .bodyStrong:    .subheadline
+        case .caption:              .caption
+        case .overline:             .caption2
+        }
+    }
+    
+    // Largest multiple of the default size this role may grow to
+    var maxScale: CGFloat {
+        switch self {
+        case .display, .title1, .title2, .overline:             1.5
+        case .title3, .bodyLg, .body, .bodyStrong, .caption:    2.0
+        }
+    }
+    
+    // Letter spacing in points
+    var tracking: CGFloat {
+        self == .overline ? 0.6 : 0
+    }
+    
+    var isUppercase: Bool {
+        self == .overline
+    }
 }
